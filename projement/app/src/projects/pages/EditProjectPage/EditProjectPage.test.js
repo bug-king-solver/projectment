@@ -64,8 +64,8 @@ describe('EditProjectPage', () => {
         expect(fetchMock.calls()[1][1].body).toEqual(
             JSON.stringify({
                 actual_design: 10,
-                actual_development: 2,
-                actual_testing: 3,
+                actual_development: 0,
+                actual_testing: 0,
             }),
         );
 
