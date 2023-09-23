@@ -7,7 +7,6 @@ from projects.models import Company, Project, Tag
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ("title", "company", "start_date", "end_date")
     list_filter = ("company__name",)
-    ordering = ("-start_date",)
 
     fieldsets = (
         (None, {"fields": ["company", "title", "start_date", "end_date"]}),
