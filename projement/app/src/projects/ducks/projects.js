@@ -47,7 +47,10 @@ const isLoadingReducer = (state = false, action) => {
     }
 };
 
-const pageReducer = (state = { currentPage: 1, totalPageCounts: 11 }, action) => {
+const pageReducer = (
+    state = { currentPage: 1, totalPageCounts: 11 },
+    action,
+) => {
     switch (action.type) {
         case SET_PAGE_ITEM_DATA:
             return { ...state, ...action };
