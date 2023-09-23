@@ -20,8 +20,6 @@ const FormField = ({ label, name, touched, errors }) => (
             tag={Field}
             invalid={touched[name] && !!errors[name]}
             min={0}
-            max={9999.99}
-            step={0.01}
             required
         />
         {touched[name] && errors[name] && (
@@ -43,9 +41,9 @@ FormField.propTypes = {
 const EditProjectForm = ({ project, onSubmit }) => (
     <Formik
         initialValues={{
-            actual_design: project.actual_design,
-            actual_development: project.actual_development,
-            actual_testing: project.actual_testing,
+            actual_design: 0,
+            actual_development: 0,
+            actual_testing: 0,
         }}
         validationSchema={Yup.object().shape({
             actual_design: Yup.number()
@@ -67,19 +65,19 @@ const EditProjectForm = ({ project, onSubmit }) => (
             <Form>
                 <FormField
                     name="actual_design"
-                    label="Actual design hours"
+                    label={`Add Actual design hours, from ${project.actual_design}`}
                     touched={touched}
                     errors={errors}
                 />
                 <FormField
                     name="actual_development"
-                    label="Actual development hours"
+                    label={`Add Actual development hours, from ${project.actual_development}`}
                     touched={touched}
                     errors={errors}
                 />
                 <FormField
                     name="actual_testing"
-                    label="Actual testing hours"
+                    label={`Add Actual testing hours, from ${project.actual_testing}`}
                     touched={touched}
                     errors={errors}
                 />
