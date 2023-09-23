@@ -13,12 +13,15 @@ describe('DashboardPage', () => {
 
     it('fetches and renders a list of projects', async () => {
         // Mock the API request to return a specific list of projects
-        fetchMock.getOnce('/api/projects', [
-            getMockProject({
-                total_estimated_hours: 10,
-                total_actual_hours: 5,
-            }),
-        ]);
+        fetchMock.getOnce('/api/projects?page=1', {
+            count: 1,
+            results: [
+                getMockProject({
+                    total_estimated_hours: 10,
+                    total_actual_hours: 5,
+                }),
+            ],
+        });
 
         const { getByText, getByTestId } = renderWithContext(<DashboardPage />);
 
@@ -34,10 +37,9 @@ describe('DashboardPage', () => {
     });
 
     it('strikes through ended projects', async () => {
-        fetchMock.getOnce('/api/projects', [
-            getMockProject({ has_ended: true }),
-        ]);
-
+        fetchMock.getOnce('/api/projects?page=1', {
+            results: [getMockProject({ has_ended: true, end_date: null })],
+        });
         const { getByText } = renderWithContext(<DashboardPage />);
 
         const projectNameElem = await waitForElement(() =>
@@ -48,9 +50,9 @@ describe('DashboardPage', () => {
     });
 
     it('shows a warning badge when a project is over budget', async () => {
-        fetchMock.getOnce('/api/projects', [
-            getMockProject({ is_over_budget: true }),
-        ]);
+        fetchMock.getOnce('/api/projects?page=1', {
+            results: [getMockProject({ is_over_budget: true })],
+        });
 
         const { getByTestId } = renderWithContext(<DashboardPage />);
 
@@ -62,11 +64,13 @@ describe('DashboardPage', () => {
     });
 
     it('shows a list of tags related to the company', async () => {
-        fetchMock.getOnce('/api/projects', [
-            getMockProject({
-                tags: [{ id: 1, name: 'Test Tag', color: 'primary' }],
-            }),
-        ]);
+        fetchMock.getOnce('/api/projects?page=1', {
+            results: [
+                getMockProject({
+                    tags: [{ id: 1, name: 'Test Tag', color: 'primary' }],
+                }),
+            ],
+        });
 
         const { getByText } = renderWithContext(<DashboardPage />);
 
@@ -76,8 +80,13 @@ describe('DashboardPage', () => {
     });
 
     it('shows a loading spinner while the projects are loading', async () => {
-        fetchMock.getOnce('/api/projects', [getMockProject()]);
-
+        fetchMock.getOnce('/api/projects?page=1', {
+            results: [
+                getMockProject({
+                    tags: [{ id: 1, name: 'Test Tag', color: 'primary' }],
+                }),
+            ],
+        });
         const { getByTestId } = renderWithContext(<DashboardPage />);
 
         expect(getByTestId('spinner')).toBeInTheDocument();
