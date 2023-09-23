@@ -53,7 +53,7 @@ class ProjectsViewSetTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # There are 3 projects in the response (loaded from the fixtures)
-        self.assertEqual(len(response.data), 5)
+        self.assertEqual(len(response.data["results"]), 5)
 
     def test_projects_list_requires_authentication(self):
         self.client.logout()
