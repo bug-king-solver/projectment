@@ -20,6 +20,8 @@ const FormField = ({ label, name, touched, errors }) => (
             tag={Field}
             invalid={touched[name] && !!errors[name]}
             min={0}
+            max={9999.99}
+            step={0.01}
             required
         />
         {touched[name] && errors[name] && (
