@@ -54,7 +54,7 @@ h5 {
     line-height: 1.5rem;
 }
 
-p + ul {
+p+ul {
     margin-top: -0.4rem;
 }
 
@@ -65,4 +65,3 @@ ul {
 li {
     font-size: 1rem;
 }
-
