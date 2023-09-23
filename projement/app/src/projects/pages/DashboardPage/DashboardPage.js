@@ -24,7 +24,7 @@ const DashboardPage = ({ fetchProjects, projects, isLoading }) => {
     }
 
     const calculateProjectHasEnded = project => {
-        return new Date(project.start_date).getDay() === new Date().getDay();
+        return project.has_ended;
     };
 
     return (
