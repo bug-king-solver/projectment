@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
@@ -35,6 +35,11 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
+        
+    def get_queryset(cls):
+        return cls.objects.prefetch_related('tags')
+
+
 
 class Project(models.Model):
     company = models.ForeignKey(
@@ -44,35 +49,30 @@ class Project(models.Model):
     )
 
     title = models.CharField("Project title", max_length=128)
-    start_date = models.DateField("Project start date", blank=True, null=True)
-    end_date = models.DateField("Project end date", blank=True, null=True)
+    start_date = models.DateField("Project start date", blank=True, null=True, db_index=True)
+    end_date = models.DateField("Project end date", blank=True, null=True, db_index=True)
 
     estimated_design = models.PositiveSmallIntegerField("Estimated design hours")
-    actual_design = models.DecimalField(
+    actual_design = models.PositiveSmallIntegerField(
         "Actual design hours",
-        max_digits=6,
-        decimal_places=2,
         default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(10000)],
+        validators=[MinValueValidator(0)],
     )
+
     estimated_development = models.PositiveSmallIntegerField(
         "Estimated development hours"
     )
-    actual_development = models.DecimalField(
+    actual_development = models.PositiveSmallIntegerField(
         "Actual development hours",
-        max_digits=6,
-        decimal_places=2,
         default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(10000)],
+        validators=[MinValueValidator(0)],
     )
 
     estimated_testing = models.PositiveSmallIntegerField("Estimated testing hours")
-    actual_testing = models.DecimalField(
+    actual_testing = models.PositiveSmallIntegerField(
         "Actual testing hours",
-        max_digits=6,
-        decimal_places=2,
         default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(10000)],
+        validators=[MinValueValidator(0)],
     )
 
     def __str__(self):
@@ -82,6 +82,10 @@ class Project(models.Model):
         return reverse(
             "project-update", kwargs={"pk": self.pk, "slug": slugify(self.title)}
         )
+
+    def get_queryset(cls):
+        return cls.objects.select_related('company')
+
 
     @property
     def has_ended(self):
