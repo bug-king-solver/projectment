@@ -24,8 +24,6 @@ class ProjectSerializer(serializers.ModelSerializer):
     company = CompanySerializer(many=False, read_only=True)
     tags = serializers.SerializerMethodField()
 
-
-
     class Meta:
         model = Project
         fields = (
@@ -57,19 +55,25 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_tags(self, obj: Project):
         return TagSerializer(obj.company.tags, many=True).data
-                
+
     def update(self, instance, validated_data):
         # Update the actual hours if provided in the request data
-        actual_design = validated_data.pop('actual_design', None)
-        actual_development = validated_data.pop('actual_development', None)
-        actual_testing = validated_data.pop('actual_testing', None)
+        actual_design = validated_data.pop("actual_design", None)
+        actual_development = validated_data.pop("actual_development", None)
+        actual_testing = validated_data.pop("actual_testing", None)
 
         if actual_design is not None:
-            Project.objects.filter(pk=instance.pk).update(actual_design=F('actual_design') + Decimal(actual_design))
+            Project.objects.filter(pk=instance.pk).update(
+                actual_design=F("actual_design") + Decimal(actual_design)
+            )
         if actual_development is not None:
-            Project.objects.filter(pk=instance.pk).update(actual_development=F('actual_development') + Decimal(actual_development))
+            Project.objects.filter(pk=instance.pk).update(
+                actual_development=F("actual_development") + Decimal(actual_development)
+            )
         if actual_testing is not None:
-            Project.objects.filter(pk=instance.pk).update(actual_testing=F('actual_testing') + Decimal(actual_testing))
+            Project.objects.filter(pk=instance.pk).update(
+                actual_testing=F("actual_testing") + Decimal(actual_testing)
+            )
 
         # Reload the instance to reflect the database changes
         instance.refresh_from_db()
