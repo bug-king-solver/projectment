@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.urls import reverse
@@ -95,3 +96,6 @@ class Project(models.Model):
     @property
     def is_over_budget(self):
         return self.total_actual_hours > self.total_estimated_hours
+
+    class Meta:
+        ordering = [F("end_date").desc(nulls_first=True)]
