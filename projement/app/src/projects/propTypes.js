@@ -4,7 +4,13 @@ export const companyType = PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
 });
-
+export const pageType = PropTypes.shape({
+    count: PropTypes.number.isRequired,
+    totalPageCounts: PropTypes.number.isRequired,
+    next: PropTypes.string,
+    currentPage: PropTypes.number.isRequired,
+    previous: PropTypes.string,
+});
 export const projectType = PropTypes.shape({
     id: PropTypes.number.isRequired,
     company: companyType.isRequired,
